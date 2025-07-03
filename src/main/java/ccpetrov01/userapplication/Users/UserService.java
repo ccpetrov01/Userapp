@@ -13,7 +13,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getAllUsers(){
+    public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -29,33 +29,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void addManyUsers(List<UserEntity> userEntityList){
+    public void addManyUsers(List<UserEntity> userEntityList) {
         userRepository.saveAll(userEntityList);
     }
 
-    public void updateEmailbyId(Integer id, String Email){
-        if (!userRepository.existsById(id)) {
-            throw new IllegalStateException("User with ID " + id + " doesn't exist.");
-        }
-        UserEntity user = new UserEntity();
-        user.setEmail(Email);
 
-        userRepository.save(user);
-    }
-
-    public void updateFirstnameandLastname(Integer id, String firstname, String lastname){
+    public void updateUserData(Integer id, String firstname, String lastname,String email) {
         if (!userRepository.existsById(id)) {
             throw new IllegalStateException("User with ID " + id + " doesn't exist.");
         }
         UserEntity user = new UserEntity();
         user.setFirstname(firstname);
         user.setLastname(lastname);
-
+        user.setEmail(email);
         userRepository.save(user);
+
     }
-
-
-
-
-
 }

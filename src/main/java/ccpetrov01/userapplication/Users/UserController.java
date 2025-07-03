@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,7 +61,16 @@ public class UserController {
     public void deleteUser(@PathVariable @Valid Integer id){
         userService.deleteUser(id);
     }
-
-
+    @Operation(summary = "Updating firstname and lastname of user by ID")
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUserData(
+            @PathVariable Integer id,
+            @RequestBody UserEntity request)
+    {
+        userService.updateUserData(id, request.getFirstname(),
+                request.getLastname() ,
+                request.getEmail());
+        return ResponseEntity.ok("User updated successfully.");
+    }
 
 }
