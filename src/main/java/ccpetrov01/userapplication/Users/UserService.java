@@ -33,5 +33,29 @@ public class UserService {
         userRepository.saveAll(userEntityList);
     }
 
+    public void updateEmailbyId(Integer id, String Email){
+        if (!userRepository.existsById(id)) {
+            throw new IllegalStateException("User with ID " + id + " doesn't exist.");
+        }
+        UserEntity user = new UserEntity();
+        user.setEmail(Email);
+
+        userRepository.save(user);
+    }
+
+    public void updateFirstnameandLastname(Integer id, String firstname, String lastname){
+        if (!userRepository.existsById(id)) {
+            throw new IllegalStateException("User with ID " + id + " doesn't exist.");
+        }
+        UserEntity user = new UserEntity();
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+
+        userRepository.save(user);
+    }
+
+
+
+
 
 }
