@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,12 +48,14 @@ public class UserController {
 
     @Operation(summary = "Get information of all Users")
     @GetMapping("/getUsers")
-    public List<UserEntityViewDto> getAllUsers() {
+    public Page<UserEntityViewDto> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
 
-        return userService.getAllUsers()
-                .stream()
-                .map(userMapper::toUserEntityViewDto)
-                .collect(Collectors.toList());
+        return userService.getAllUsers(page, size)
+                .map(userMapper::toUserEntityViewDto);
+
     }
 
     @Operation(summary = "Delete User by ID")
@@ -71,6 +73,17 @@ public class UserController {
                 request.getLastname() ,
                 request.getEmail());
         return ResponseEntity.ok("User updated successfully.");
+    }
+
+    @Operation(summary = "Get information of all Users by any criteria")
+    @GetMapping("/searchUsers")
+    public Page<UserEntityViewDto> searchUsers(
+            @RequestParam String term,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return userService.searchUsers(term, page, size)
+                .map(userMapper::toUserEntityViewDto);
     }
 
 }

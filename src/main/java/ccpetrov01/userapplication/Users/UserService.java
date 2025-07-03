@@ -1,9 +1,13 @@
 package ccpetrov01.userapplication.Users;
 
-import org.apache.catalina.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -13,8 +17,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public Page<UserEntity> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable);
     }
 
     public void addNewUser(UserEntity userEntity) {
@@ -45,4 +50,10 @@ public class UserService {
         userRepository.save(user);
 
     }
+
+    public Page<UserEntity> searchUsers(String term, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.searchUsers(term, pageable);
+    }
 }
+
