@@ -52,7 +52,12 @@ public class UserService {
     }
 
     public Page<UserEntity> searchUsers(String term, int page, int size) {
+
         Pageable pageable = PageRequest.of(page, size);
+
+        if (term == null || term.isBlank()) {
+            throw new IllegalArgumentException("Search term cannot be empty.");
+        }
         return userRepository.searchUsers(term, pageable);
     }
 }
