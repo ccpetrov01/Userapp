@@ -1,4 +1,4 @@
-package ccpetrov01.userapplication.Users.Swagger;
+package ccpetrov01.userapplication.Swagger;
 
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.OpenAPI;
