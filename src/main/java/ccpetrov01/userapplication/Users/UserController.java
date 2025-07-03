@@ -65,7 +65,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUserData(
             @PathVariable Integer id,
-            @RequestBody UserEntity request)
+            @RequestBody @Valid UserEntity request)
     {
         userService.updateUserData(id, request.getFirstname(),
                 request.getLastname() ,
