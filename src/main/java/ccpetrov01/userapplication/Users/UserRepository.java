@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query("SELECT u FROM UserEntity u WHERE " +
@@ -14,4 +16,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "LOWER(u.email) LIKE LOWER(CONCAT('%', :term, '%')) " +
             "ORDER BY u.lastname ASC, u.dob ASC")
     Page<UserEntity> searchUsers(@Param("term") String term , Pageable pageable);
+    Optional<UserEntity> findByEmail(String email);
+    boolean existsByPhonenumber(String phonenumber);
+    boolean existsByEmail(String email);
 }

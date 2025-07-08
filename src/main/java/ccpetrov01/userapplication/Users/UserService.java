@@ -1,20 +1,26 @@
 package ccpetrov01.userapplication.Users;
 
+import ccpetrov01.userapplication.Security.JwtService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public Page<UserEntity> getAllUsers(int page, int size) {
@@ -59,6 +65,31 @@ public class UserService {
             throw new IllegalArgumentException("Search term cannot be empty.");
         }
         return userRepository.searchUsers(term, pageable);
+    }
+
+    public LoginViewDto login(LoginDto loginDto) {
+        UserEntity user = userRepository.findByEmail(loginDto.email())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(loginDto.password(), user.getPassword())) {
+            throw new BadCredentialsException("Invalid credentials");
+        }
+
+        String token = jwtService.generateToken(user.getEmail());
+        return new LoginViewDto(token);
+    }
+
+    public UserEntity register(UserEntity user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+
+        if (userRepository.existsByPhonenumber(user.getPhonenumber())) {
+            throw new IllegalArgumentException("Phone number already in use");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 }
 

@@ -21,6 +21,27 @@ public class UserController {
         this.userMapper = userMapper;
         this.userService = userService;
     }
+    @Operation(summary = "User Login")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User Login successfully"),
+            @ApiResponse(responseCode = "400", description = "Validation failed or bad request")
+    })
+    @PostMapping("/login")
+    public ResponseEntity<LoginViewDto> login(@RequestBody @Valid LoginDto loginDto) {
+        LoginViewDto response = userService.login(loginDto);
+        return ResponseEntity.ok(response);
+    }
+    @Operation(summary = "User Register")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User Register successfully"),
+            @ApiResponse(responseCode = "400", description = "Validation failed or bad request")
+    })
+    @PostMapping("/register")
+    public ResponseEntity<UserEntityViewDto> register(@RequestBody @Valid UserEntityDto dto) {
+        UserEntity user = userMapper.toUserEntityDto(dto);
+        UserEntity saved = userService.register(user);
+        return ResponseEntity.ok(userMapper.toUserEntityViewDto(saved));
+    }
 
     @Operation(summary = "Add a new User")
     @ApiResponses(value = {
@@ -42,7 +63,7 @@ public class UserController {
     @PostMapping("/addAll")
     public void addNewUsers(@RequestBody @Valid List<UserEntityDto> userEntityDtoList)
     {
-        List<UserEntity> userEntities = userMapper.toUserDetailsDtolist(userEntityDtoList);
+        List<UserEntity> userEntities = userMapper.toUserEntityDtolist(userEntityDtoList);
         userService.addManyUsers(userEntities);
     }
 

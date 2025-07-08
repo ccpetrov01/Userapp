@@ -3,6 +3,7 @@ package ccpetrov01.userapplication.Users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,8 @@ public class UserEntity {
     @NotBlank(message = "dob cannot be blank")
     private LocalDate dob;
     @NotBlank(message = "password cannot be blank")
+    @Size(min = 6)
     private String password;
     private String role = "USER";
+    private String token;
 }
