@@ -38,4 +38,7 @@ public class UserEntity {
     private String phonenumber;
     @NotBlank(message = "dob cannot be blank")
     private LocalDate dob;
+    @NotBlank(message = "password cannot be blank")
+    private String password;
+    private String role = "USER";
 }
