@@ -42,6 +42,7 @@ public class UserEntity {
     @NotBlank(message = "password cannot be blank")
     @Size(min = 6)
     private String password;
-    private String role = "USER";
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
     private String token;
 }
