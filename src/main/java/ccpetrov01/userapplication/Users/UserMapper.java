@@ -22,6 +22,7 @@ public class UserMapper {
         userentity.setDob(dto.dob());
         userentity.setPassword(dto.password());
         userentity.setPhonenumber(dto.phonenumber());
+        userentity.setRole(Role.valueOf(dto.role()));
 
         return userentity;
     }

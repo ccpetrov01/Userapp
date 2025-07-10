@@ -8,6 +8,7 @@ public record UserEntityDto(
         String email,
         String phonenumber,
         String password,
-        LocalDate dob
+        LocalDate dob,
+        String role
 ) {
 }
