@@ -1,5 +1,6 @@
 package ccpetrov01.userapplication.Exceptions;
 
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -59,5 +60,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNotFound(UsernameNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
+
+    @ExceptionHandler(ClassNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ClassNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data type is wrong" + ex.getMessage());
+    }
+
+    @ExceptionHandler(UnexpectedTypeException.class)
+    public ResponseEntity<String> handleNotFound(UnexpectedTypeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Constraints error" + ex.getMessage());
+    }
+
+
 }
 
