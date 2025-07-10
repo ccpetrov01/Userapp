@@ -3,6 +3,7 @@ package ccpetrov01.userapplication.Users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,12 +38,12 @@ public class UserEntity {
     @NotBlank(message = "phonenumber cannot be blank")
     @Column(unique = true)
     private String phonenumber;
-    @NotBlank(message = "dob cannot be blank")
+    @NotNull(message = "dob cannot be null")
     private LocalDate dob;
     @NotBlank(message = "password cannot be blank")
     @Size(min = 6)
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
     private String token;
 }

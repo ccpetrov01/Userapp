@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE user_entity (
     id SERIAL PRIMARY KEY,
     firstname VARCHAR(25) NOT NULL,
     lastname VARCHAR(25) NOT NULL,
