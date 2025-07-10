@@ -98,3 +98,87 @@ Update application.properties with your JWT secret and expiration.
 Customize roles and authorization as needed.
 Make sure the database is running before starting the app.
 
+#Api Documentation
+
+## POST /login
+Login for user.
+Request Body (JSON):
+
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+Response:
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+Errors:
+400 Bad Request: Invalid credentials or malformed request.
+404 Not Found: User not found.
+
+## POST /register
+Registers a new user.
+Request Body (JSON):
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john@example.com",
+  "phonenumber": "1234567890",
+  "password": "secret123"
+}
+
+Response:
+
+{
+  "email": "john@example.com",
+  "firstname": "John",
+  "lastname": "Doe"
+}
+
+Errors:
+400 Bad Request: Email or phone number already in use, or invalid format.
+
+## GET /users
+
+Description: Returns a list of all users (requires JWT token).
+
+Headers:
+Authorization: Bearer <your-token>
+
+Response:
+[
+  {
+    "email": "john@example.com",
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  {
+    "email": "jane@example.com",
+    "firstname": "Jane",
+    "lastname": "Smith"
+  }
+]
+
+Errors:
+401 Unauthorized: Missing or invalid token.
+
+## GET /users/searchUsers?term=<searchTerm>
+
+Description: Searches users by name or email. Returns partial matches (requires JWT).
+Query Parameter:
+term: The search term (e.g., john, @example.com)
+
+Headers:
+Authorization: Bearer <your-token>
+
+Response:
+[
+  {
+    "email": "john@example.com",
+    "firstname": "John",
+    "lastname": "Doe"
+  }
+]
