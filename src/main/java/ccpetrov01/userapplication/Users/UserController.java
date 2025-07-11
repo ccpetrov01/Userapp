@@ -69,14 +69,13 @@ public class UserController {
 
     @Operation(summary = "Get information of all Users")
     @GetMapping("/getUsers")
-    public Page<UserEntityViewDto> getAllUsers(
+    public List<UserEntityViewDto> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-
         return userService.getAllUsers(page, size)
-                .map(userMapper::toUserEntityViewDto);
-
+                .map(userMapper::toUserEntityViewDto)
+                .getContent();
     }
 
     @Operation(summary = "Delete User by ID")
@@ -98,13 +97,14 @@ public class UserController {
 
     @Operation(summary = "Get information of all Users by any criteria")
     @GetMapping("/searchUsers")
-    public Page<UserEntityViewDto> searchUsers(
+    public List<UserEntityViewDto> searchUsers(
             @RequestParam String term,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         return userService.searchUsers(term, page, size)
-                .map(userMapper::toUserEntityViewDto);
+                .map(userMapper::toUserEntityViewDto)
+                .getContent();
     }
 
 }

@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -51,15 +52,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UserEntity user = userRepository.findByEmail(email).orElse(null);
 
             if (user != null && jwtService.isTokenValid(token, user)) {
+                String roleName = "ROLE_" + user.getRole().name();
+                System.out.println("Assigning authority: " + roleName);
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 email,
                                 null,
-                                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+                                List.of(new SimpleGrantedAuthority(roleName))
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                if (auth != null) {
+                    auth.getAuthorities().forEach(authority ->
+                            System.out.println("Role in security context: " + authority.getAuthority()));
+                }
             }
+
         }
 
         filterChain.doFilter(request, response);

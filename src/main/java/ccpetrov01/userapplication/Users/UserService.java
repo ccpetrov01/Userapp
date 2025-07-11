@@ -75,7 +75,7 @@ public class UserService {
             throw new BadCredentialsException("Invalid credentials");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
         return new LoginViewDto(token);
     }
 
